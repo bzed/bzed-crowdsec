@@ -1,0 +1,48 @@
+---
+stages:
+  - validation
+  - unit
+
+default:
+  image: ruby
+  cache:
+    paths:
+      - vendor/bundle
+
+.parallel_matrix:
+  parallel:
+    matrix:
+      - PUPPET_GEM_VERSION: ['~> 7']
+        RUBY_VERSION: ['2.7']
+      - PUPPET_GEM_VERSION: ['~> 8']
+        RUBY_VERSION: ['3.2']
+  image: ruby:${RUBY_VERSION}
+  cache:
+    key: "${CI_JOB_IMAGE}-Puppet ${PUPPET_GEM_VERSION}"
+    paths:
+      - vendor/bundle
+  before_script:
+    - rm -f Gemfile.lock || true
+    - ruby --version
+    - gem --version
+    - bundle -v
+    - bundle config set --local path 'vendor/bundle'
+    - bundle config set --local without 'system_tests'
+    - bundle config set --local jobs $(nproc)
+    - bundle install
+    - bundle clean
+    - bundle env
+  rules:
+    - if: $CI_COMMIT_TAG == null
+
+'Puppet / validation':
+  extends: .parallel_matrix
+  stage: validation
+  script:
+    - bundle exec rake validate lint check rubocop
+
+'Puppet / unit':
+  extends: .parallel_matrix
+  stage: unit
+  script:
+    - bundle exec rake parallel_spec
