@@ -32,6 +32,14 @@ class crowdsec (
   Boolean $manage_sources = true,
   Stdlib::HTTPUrl $local_api_url = 'http://127.0.0.1:8080',
   Optional[Stdlib::Fqdn] $local_api_puppet_certname = undef,
+  String $local_api_login = $trusted['certname'],
+  Sensitive[String] $local_api_password = Sensitive(
+    fqdn_rand_string(
+      32,
+      undef,
+      $facts['networking']['mac'],
+    )
+  ),
   Boolean $force_local_api_no_tls = false,
   Boolean $register_machine = ($local_api_url != 'http://127.0.0.1:8080') and $local_api_puppet_certname,
 ) {
@@ -56,8 +64,8 @@ class crowdsec (
 
   $local_config = $local_api_config + $config
   if !$force_local_api_no_tls and $enable_local_api {
-    $tls_cert = $local_config.dig('api', 'tls', 'cert_file')
-    $tls_key = $local_config.dig('api', 'tls', 'key_file')
+    $tls_cert = $local_config.dig('api', 'server', 'tls', 'cert_file')
+    $tls_key = $local_config.dig('api', 'server', 'tls', 'key_file')
     if !($tls_cert and $tls_key) {
       fail('Please configure TLS for the crodsec local API (or set $force_local_api_no_tls to true).')
     }
@@ -85,6 +93,27 @@ class crowdsec (
 
   if $enable_local_api {
     include crowdsec::local_api
+  }
+
+  @@crowdsec::local_api::register { $local_api_login :
+    password => $local_api_password.unwrap,
+    tag      => $local_api_puppet_certname,
+  }
+
+  file { '/etc/crowdsec/local_api_credentials.yaml':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
+    content => to_yaml(
+      {
+        'url'      => $local_api_url,
+        'login'    => $local_api_login,
+        'password' => $local_api_password.unwrap,
+      }
+    ),
+    require => Package['crowdsec'],
+    notify  => Service['crowdsec.service'],
   }
 
 }
