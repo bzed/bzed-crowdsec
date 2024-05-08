@@ -9,7 +9,7 @@ Facter.add(:crowdsec) do
     certnames_file = '/etc/crowdsec/crowdsec_machine_ids_to_certname.yaml'
     if Facter::Util::Resolution.which('cscli')
       output = {}
-      if File.exists(certnames_file)
+      if File.exists?(certnames_file)
         output['certnames'] = YAML.load_file(certnames_file)
       end
 
