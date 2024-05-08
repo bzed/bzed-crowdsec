@@ -95,14 +95,14 @@ class crowdsec (
   $default_config = {
     'common' => {
       'log_dir' => '/var/log/crowdsec',
-    }
+    },
   }
   $local_api_config = {
     'api' => {
       'server' => {
         'enable' => $enable_local_api,
-      }
-    }
+      },
+    },
   }
 
   $local_config = $default_config + $local_api_config + $config
