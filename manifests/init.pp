@@ -145,8 +145,8 @@ class crowdsec (
 
   file { '/etc/crowdsec/local_api_credentials.yaml':
     ensure  => file,
-    owner   => 'root',
-    group   => 'root',
+    owner   => $user,
+    group   => $group,
     mode    => '0600',
     content => to_yaml(
       {
