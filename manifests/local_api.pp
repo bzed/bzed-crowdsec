@@ -74,19 +74,10 @@ class crowdsec::local_api {
   }
 
 
-
   # FIXME - remove later
   file { '/etc/facter/facts.d/crowdsec.json':
     ensure => absent,
     force  => true,
   }
 
-  $puppet_managed_machines = pick_default(
-    $facts.dig('crowdsec_puppet', 'managed_machines'), []
-  )
-
-
-
-
-  Crowdsec::Local_api::Register <<| tag == $crowdsec::local_api_puppet_certname |>>
 }
