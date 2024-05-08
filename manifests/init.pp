@@ -70,7 +70,7 @@ class crowdsec (
 
     systemd::manage_dropin { 'crowdsec_as_non_root.conf':
       unit          => 'crowdsec.service',
-      notify        => 'crowdsec.service',
+      notify        => Service['crowdsec.service'],
       service_entry => {
         'User'                => $user,
         'Group'               => $group,
