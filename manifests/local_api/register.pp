@@ -32,11 +32,11 @@ define crowdsec::local_api::register (
       Exec["register-${machine_id}"] ~> Service['crowdsec.service']
     }
   }
-  
+
   concat::fragment { "crowdsec-machine-${machine_id}":
     target  => 'crowdsec_managed_machines',
     content => to_json({ 'crowdsec_puppet' => { 'managed_machines' => [ $machine_id ] } }),
     order   => '050',
   }
-  
+
 }
