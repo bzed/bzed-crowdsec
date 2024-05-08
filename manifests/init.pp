@@ -126,8 +126,8 @@ class crowdsec (
 
   file { '/etc/crowdsec/config.yaml.local':
     ensure  => file,
-    owner   => 'root',
-    group   => 'root',
+    owner   => $user,
+    group   => $group,
     mode    => '0640',
     content => to_yaml($local_config),
     require => Package['crowdsec'],
