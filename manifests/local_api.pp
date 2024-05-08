@@ -75,6 +75,7 @@ class crowdsec::local_api {
 
 
 
+  # FIXME - remove later
   file { '/etc/facter/facts.d/crowdsec.json':
     ensure => absent,
     force  => true,
