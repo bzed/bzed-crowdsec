@@ -12,20 +12,26 @@
 # Setup apt sources from the crowdsec repositories.
 # Defaults to true.
 #
-# @param $local_api_url
+# @param local_api_url
 # The local api url crowdsec should connect to. Defaults to http://127.0.0.1:8080
 #
-# @param $local_api_puppet_certname
+# @param local_api_puppet_certname
 # If this option is set and matches $trusted['certname'], enable the local api
 # and collect host registrations exported for that certname.
 #
-# @param $force_local_api_no_tls
+# @param force_local_api_no_tls
 # Set this to true if you really want to run the local api server without TLS.
 # Absolutely not recommended.
 #
-# @param $register_machine
+# @param register_machine
 # Register machine automatically if $local_api_url and $local_api_puppet_certname
 # is configured properly.
+#
+# @param enable_local_api
+# Configure crowdsec to run as LAPI server
+#
+# @param run_as_root
+# Defaults to true, when false we configure a user/group for crowdsec.
 #
 class crowdsec (
   Hash $config = {},
@@ -42,18 +48,40 @@ class crowdsec (
   ),
   Boolean $force_local_api_no_tls = false,
   Boolean $register_machine = ($local_api_url != 'http://127.0.0.1:8080') and $local_api_puppet_certname,
+  Boolean $enable_local_api = $local_api_puppet_certname and $local_api_puppet_certname == $trusted['certname'],
+  Boolean $run_as_root = !$enable_local_api,
 ) {
+
+  if $run_as_root {
+    $user = 'root'
+    $group = 'root'
+  } else {
+    $user = 'crowdsec'
+    $group = 'crowdsec'
+
+    group { $group:
+      system => true,
+    }
+    user { $user:
+      system => true,
+      home   => '/var/lib/crowdsec',
+      gid    => $group,
+    }
+  }
+
+  file { ['/etc/crowdsec', '/var/log/crowdsec', '/var/lib/crowdsec']:
+    ensure  => directory,
+    owner   => $user,
+    group   => $group,
+    recurse => true,
+  }
+
 
   if $manage_sources {
     include crowdsec::sources
     Class['crowdsec::sources'] -> Package['crowdsec']
   }
 
-  if $local_api_puppet_certname and $local_api_puppet_certname == $trusted['certname'] {
-    $enable_local_api = true
-  } else {
-    $enable_local_api = false
-  }
   $local_api_config = {
     'api' => {
       'server' => {
