@@ -18,7 +18,8 @@ class crowdsec::local_api {
         [
           "title",
           "parameters.machine_id",
-          "parameters.password"
+          "parameters.password",
+          "certname"
         ],
         [
           "and",
@@ -30,8 +31,26 @@ class crowdsec::local_api {
     ]
   | EOF
 
+  $puppetdb_query_data = puppetdb_query($query)
+  $crowdsec_machine_ids_to_certname = Hash(
+    $puppetdb_query_data.map |$hash| {
+      [
+        pick($hash['parameters.machine_id'], $hash['title']),
+        $hash['certname'],
+      ]
+    }
+  )
+
+  file { '/etc/crowdsec/crowdsec_machine_ids_to_certname.yaml':
+    ensure  => file,
+    owner   => $user,
+    group   => $group,
+    content => to_yaml($crowdsec_machine_ids_to_certname),
+    mode    => '0640',
+  }
+
   $exported_lapi_machines = Hash(
-    puppetdb_query($query).map |$hash| {
+    $puppetdb_query_data.map |$hash| {
       [
         pick($hash['parameters.machine_id'], $hash['title']),
         Sensitive($hash['parameters.password']),
