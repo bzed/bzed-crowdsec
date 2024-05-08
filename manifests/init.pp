@@ -44,7 +44,7 @@ class crowdsec (
   Boolean $use_anonymous_api_logins = true,
   Optional[Stdlib::Fqdn] $local_api_puppet_certname = undef,
   String $local_api_login = if $use_anonymous_api_logins {
-      sha265("${trusted['certname']} ${facts['networking']['mac']}")
+      sha256("${trusted['certname']} ${facts['networking']['mac']}")
     } else {
       $trusted['certname']
     },
