@@ -67,6 +67,16 @@ class crowdsec (
       home   => '/var/lib/crowdsec',
       gid    => $group,
     }
+
+    systemd::manage_dropin { 'crowdsec_as_non_root.conf':
+      unit          => 'crowdsec.service',
+      notify        => 'crowdsec.service',
+      service_entry => {
+        'User'                => $user,
+        'Group'               => $group,
+        'AmbientCapabilities' => 'CAP_NET_BIND_SERVICE',
+      },
+    }
   }
 
   file { ['/etc/crowdsec', '/var/log/crowdsec', '/var/lib/crowdsec']:
@@ -82,6 +92,11 @@ class crowdsec (
     Class['crowdsec::sources'] -> Package['crowdsec']
   }
 
+  $default_config = {
+    'common' => {
+      'log_dir' => '/var/log/crowdsec',
+    }
+  }
   $local_api_config = {
     'api' => {
       'server' => {
@@ -90,7 +105,7 @@ class crowdsec (
     }
   }
 
-  $local_config = $local_api_config + $config
+  $local_config = $default_config + $local_api_config + $config
   if !$force_local_api_no_tls and $enable_local_api {
     $tls_cert = $local_config.dig('api', 'server', 'tls', 'cert_file')
     $tls_key = $local_config.dig('api', 'server', 'tls', 'key_file')
