@@ -15,6 +15,10 @@
 # @param local_api_url
 # The local api url crowdsec should connect to. Defaults to http://127.0.0.1:8080
 #
+# @param use_anonymous_api_logins
+# Use a hash over fqdn and mac address instead of the puppet certname.
+# Don't disable if you plan to connect to the central API.
+#
 # @param local_api_puppet_certname
 # If this option is set and matches $trusted['certname'], enable the local api
 # and collect host registrations exported for that certname.
@@ -37,8 +41,13 @@ class crowdsec (
   Hash $config = {},
   Boolean $manage_sources = true,
   Stdlib::HTTPUrl $local_api_url = 'http://127.0.0.1:8080',
+  Boolean $use_anonymous_api_logins = true,
   Optional[Stdlib::Fqdn] $local_api_puppet_certname = undef,
-  String $local_api_login = $trusted['certname'],
+  String $local_api_login = if $use_anonymous_api_logins {
+      sha265("${trusted['certname']} ${facts['networking']['mac']}")
+    } else {
+      $trusted['certname']
+    },
   Sensitive[String] $local_api_password = Sensitive(
     fqdn_rand_string(
       32,
