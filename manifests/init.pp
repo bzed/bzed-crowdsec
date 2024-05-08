@@ -16,7 +16,10 @@
 # The local api url crowdsec should connect to. Defaults to http://127.0.0.1:8080
 #
 # @param use_anonymous_api_logins
-# Use a hash over fqdn and mac address instead of the puppet certname.
+# Use a hash over fqdn and  password instead of the puppet certname.
+# This sounds weird, but it makes sure that we update user/password
+# in case the password changes. There is not way to verify an existing password
+# unfortunately.
 # Don't disable if you plan to connect to the central API.
 #
 # @param local_api_puppet_certname
@@ -43,11 +46,6 @@ class crowdsec (
   Stdlib::HTTPUrl $local_api_url = 'http://127.0.0.1:8080',
   Boolean $use_anonymous_api_logins = true,
   Optional[Stdlib::Fqdn] $local_api_puppet_certname = undef,
-  String $local_api_login = if $use_anonymous_api_logins {
-      sha256("${trusted['certname']} ${facts['networking']['mac']}")
-    } else {
-      $trusted['certname']
-    },
   Sensitive[String] $local_api_password = Sensitive(
     fqdn_rand_string(
       32,
@@ -55,6 +53,11 @@ class crowdsec (
       $facts['networking']['mac'],
     )
   ),
+  String $local_api_login = if $use_anonymous_api_logins {
+      sha256("${trusted['certname']} ${local_api_password}")
+    } else {
+      $trusted['certname']
+    },
   Boolean $force_local_api_no_tls = false,
   Boolean $register_machine = ($local_api_url != 'http://127.0.0.1:8080') and $local_api_puppet_certname,
   Boolean $enable_local_api = $local_api_puppet_certname and $local_api_puppet_certname == $trusted['certname'],
