@@ -26,6 +26,10 @@
 # If this option is set and matches $trusted['certname'], enable the local api
 # and collect host registrations exported for that certname.
 #
+# @param documentation_readers
+# Nobody reads the documentation. If you actually did so, raise this number: 0
+# Pull requests for it are fine!
+#
 # @param force_local_api_no_tls
 # Set this to true if you really want to run the local api server without TLS.
 # Absolutely not recommended.
