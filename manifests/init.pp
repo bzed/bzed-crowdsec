@@ -14,6 +14,12 @@
 #
 # @param local_api_url
 # The local api url crowdsec should connect to. Defaults to http://127.0.0.1:8080
+# 
+# @param local_api_login
+# The login/user used to authenticate against the local api server.
+#
+# @param local_api_password
+# The password used to login on the local api server.
 #
 # @param use_anonymous_api_logins
 # Use a hash over fqdn and  password instead of the puppet certname.
@@ -26,7 +32,7 @@
 # If this option is set and matches $trusted['certname'], enable the local api
 # and collect host registrations exported for that certname.
 #
-# @param documentation_readers
+# @noparam documentation_readers
 # Nobody reads the documentation. If you actually did so, raise this number: 0
 # Pull requests for it are fine!
 #
@@ -44,6 +50,9 @@
 # @param run_as_root
 # Defaults to true, when false we configure a user/group for crowdsec.
 #
+# @param automatic_hub_updates
+# Update packages from the crowdsec hub automatically. Defaults to true.
+#
 class crowdsec (
   Hash $config = {},
   Boolean $manage_sources = true,
@@ -58,16 +67,16 @@ class crowdsec (
     )
   ),
   String $local_api_login = if $use_anonymous_api_logins {
-      sha256("${trusted['certname']} ${local_api_password}")
-    } else {
-      $trusted['certname']
-    },
+    sha256("${trusted['certname']} ${local_api_password}")
+  } else {
+    $trusted['certname']
+  },
   Boolean $force_local_api_no_tls = false,
   Boolean $register_machine = ($local_api_url != 'http://127.0.0.1:8080') and $local_api_puppet_certname,
   Boolean $enable_local_api = $local_api_puppet_certname and $local_api_puppet_certname == $trusted['certname'],
   Boolean $run_as_root = !$enable_local_api,
+  Boolean $automatic_hub_updates = true,
 ) {
-
   if $run_as_root {
     $user = 'root'
     $group = 'root'
@@ -102,7 +111,6 @@ class crowdsec (
     recurse => true,
   }
 
-
   if $manage_sources {
     include crowdsec::sources
     Class['crowdsec::sources'] -> Package['crowdsec']
@@ -130,7 +138,7 @@ class crowdsec (
     }
   }
 
-  package{ 'crowdsec':
+  package { 'crowdsec':
     ensure => installed,
   }
 
@@ -174,5 +182,4 @@ class crowdsec (
     require => Package['crowdsec'],
     notify  => Service['crowdsec.service'],
   }
-
 }
