@@ -53,6 +53,12 @@
 # @param automatic_hub_updates
 # Update packages from the crowdsec hub automatically. Defaults to true.
 #
+# @param config_basedir
+# Base directory for all crowdsec config files.
+#
+# @param service_name
+# Name of the service used to control the crowdsec daemon.
+#
 class crowdsec (
   Hash $config = {},
   Boolean $manage_sources = true,
@@ -76,7 +82,9 @@ class crowdsec (
   Boolean $enable_local_api = $local_api_puppet_certname and $local_api_puppet_certname == $trusted['certname'],
   Boolean $run_as_root = !$enable_local_api,
   Boolean $automatic_hub_updates = true,
-) {
+  Stdlib::Absolutepath $config_basedir = $crowdsec::params::config_basedir,
+  String $service_name = $crowdsec::params::service_name,
+) inherits crowdsec::params {
   if $run_as_root {
     $user = 'root'
     $group = 'root'
@@ -94,8 +102,8 @@ class crowdsec (
     }
 
     systemd::manage_dropin { 'crowdsec_as_non_root.conf':
-      unit          => 'crowdsec.service',
-      notify        => Service['crowdsec.service'],
+      unit          => $service_name,
+      notify        => Service[$service_name],
       service_entry => {
         'User'                => $user,
         'Group'               => $group,
@@ -104,7 +112,7 @@ class crowdsec (
     }
   }
 
-  file { ['/etc/crowdsec', '/var/log/crowdsec', '/var/lib/crowdsec']:
+  file { [$config_basedir, '/var/log/crowdsec', '/var/lib/crowdsec']:
     ensure  => directory,
     owner   => $user,
     group   => $group,
@@ -142,13 +150,13 @@ class crowdsec (
     ensure => installed,
   }
 
-  service { 'crowdsec.service':
+  service { $service_name:
     ensure  => 'running',
     enable  => 'true',
     require => Package['crowdsec'],
   }
 
-  file { '/etc/crowdsec/config.yaml.local':
+  file { "${config_basedir}/config.yaml.local":
     ensure  => file,
     owner   => $user,
     group   => $group,
@@ -167,7 +175,7 @@ class crowdsec (
     tag      => $local_api_puppet_certname,
   }
 
-  file { '/etc/crowdsec/local_api_credentials.yaml':
+  file { "${config_basedir}/local_api_credentials.yaml":
     ensure  => file,
     owner   => $user,
     group   => $group,
