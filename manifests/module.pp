@@ -12,7 +12,7 @@
 # - collections
 #
 # @param hub_type
-# Required parameter to specify the type of package to install from the hub
+# Required parameter to specify the type of module to install from the hub
 # (parsers, collections, .....)
 #
 # @param ensure
@@ -26,18 +26,18 @@
 #   --foo bar
 # being pass as option to cscli .... install.
 #
-# @param package_name
-# Defaults to $name. Sets the name of the hub package to install/uninstall.
+# @param module_name
+# Defaults to $name. Sets the name of the hub module to install/uninstall.
 #
 # @example
-#   crowdsec::hub_package { 'crowdsecurity/ssh-bf':
+#   crowdsec::module { 'crowdsecurity/ssh-bf':
 #     type => 'collections',
 #   }
-define crowdsec::hub_package (
-  Crowdsec::Hub_type $hub_type,
+define crowdsec::module (
+  Crowdsec::Module_type $hub_type,
   Enum['present', 'absent'] $ensure = 'present',
   Hash[Pattern[/[a-z]+/], String] $install_options = {},
-  String $package_name = $name,
+  String $module_name = $name,
 ) {
   include crowdsec
 
@@ -48,4 +48,5 @@ define crowdsec::hub_package (
     $install_command = 'install'
   } else {
     $install_command = 'uninstall'
-} }
+  }
+}
