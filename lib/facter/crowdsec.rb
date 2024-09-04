@@ -13,7 +13,7 @@ Facter.add(:crowdsec) do
         output['certnames'] = YAML.load_file(certnames_file)
       end
       hub_data = Facter::Util::Resolution.exec('cscli hub list -o json')
-      unless data.to_s.strip.empty?
+      unless hub_data.to_s.strip.empty?
         output.merge!(JSON.parse(hub_data))
       end
       unless output.empty?
