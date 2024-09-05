@@ -50,10 +50,19 @@ define crowdsec::module (
 ) {
   include crowdsec
 
-  $local = ($source =~ String or $content =~ String)
+  $_current_state = pick_default($facts.dig('crowdsec', $module_type), []).filter |$_module| {
+    $_module['name'] == $module_name
+  }
+  if $_current_state {
+    $module_file = $_current_state[0]['local_path']
+    $current_state = $_current_state[0]['status'].split(',')
+  } else {
+    $module_file = "${crowdsec::config_basedir}/${module_type}/${module_filename_part}.yaml"
+    $current_state = ['disabled']
+  }
+  $local = ($source =~ String or $content =~ String or 'local' in $current_state)
   $automatic_hub_updates = $crowdsec::automatic_hub_updates
 
-  $current_state = $facts.dig('crowdsec', $module_type)
   if ($ensure == 'present') {
     $install_command = 'install'
   } else {
@@ -61,15 +70,38 @@ define crowdsec::module (
   }
 
   $_module_name_parts = split($module_name, '/')
-  $_module_source = $_module_name_parts[0]
-  $_module_filename_part = $_module_name_parts[1]
-  $module_file = "${crowdsec::config_basedir}/${module_type}/${_module_filename_part}.yaml"
+  $module_source = $_module_name_parts[0]
+  $module_filename_part = $_module_name_parts[1]
+
+# func (s *ItemState) Text() string {
+# 	ret := "disabled"
+# 
+# 	if s.Installed {
+# 		ret = "enabled"
+# 	}
+# 
+# 	if s.IsLocal() {
+# 		ret += ",local"
+# 	}
+# 
+# 	if s.Tainted {
+# 		ret += ",tainted"
+# 	} else if !s.UpToDate && !s.IsLocal() {
+# 		ret += ",update-available"
+# 	}
+# 
+# 	return ret
+
   if $local {
     file { $module_file:
       ensure  => $ensure,
       content => $content,
       source  => $source,
       notify  => Service[$crowdsec::service_name],
+    }
+  } else {
+    if 'tainted' in $current_state {
+      fail('FIXME')
     }
   }
 }
