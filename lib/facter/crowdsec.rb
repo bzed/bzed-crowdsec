@@ -16,6 +16,10 @@ Facter.add(:crowdsec) do
       unless hub_data.to_s.strip.empty?
         output.merge!(JSON.parse(hub_data))
       end
+      machine_data = Facter::Util::Resolution.exec('cscli machines list -o json')
+      unless machine_data.to_s.strip.empty?
+        output['machines'] = JSON.parse(machine_data)
+      end
       unless output.empty?
         output
       end
