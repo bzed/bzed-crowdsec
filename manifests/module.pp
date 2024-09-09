@@ -34,7 +34,7 @@
 #
 # @param content
 # Module is not from the hub, use this content for the file.
-# 
+#
 # @example
 #   crowdsec::module { 'crowdsecurity/ssh-bf':
 #     type => 'collections',
@@ -75,21 +75,21 @@ define crowdsec::module (
 
 # func (s *ItemState) Text() string {
 # 	ret := "disabled"
-# 
+#
 # 	if s.Installed {
 # 		ret = "enabled"
 # 	}
-# 
+#
 # 	if s.IsLocal() {
 # 		ret += ",local"
 # 	}
-# 
+#
 # 	if s.Tainted {
 # 		ret += ",tainted"
 # 	} else if !s.UpToDate && !s.IsLocal() {
 # 		ret += ",update-available"
 # 	}
-# 
+#
 # 	return ret
 
   if $local {
@@ -100,8 +100,48 @@ define crowdsec::module (
       notify  => Service[$crowdsec::service_name],
     }
   } else {
-    if 'tainted' in $current_state {
-      fail('FIXME')
+    $uninstall_cmd = "cscli ${module_type} remove ${module_name}"
+    $install_flags = shellquote(Array($install_options))
+    $install_cmd = "cscli ${module_type} remove ${module_name} ${install_flags}"
+
+    if ($ensure == 'absent') {
+      $uninstall = ('enabled' in $current_state)
+      $install = false
+    } else {
+      if 'tainted' in $current_state {
+        $uninstall = true
+        $install = true
+      } else {
+        $uninstall = false
+        $install = !('enabled' in $current_state)
+      }
+    }
+
+    if $uninstall {
+      exec { $uninstall_cmd:
+        path  => $facts['path'],
+        user  => $crowdsec::user,
+        group => $crowdsec::group,
+      }
+    }
+    if $install {
+      exec { $install_cmd:
+        path  => $facts['path'],
+        user  => $crowdsec::user,
+        group => $crowdsec::group,
+      }
+    }
+    if $install and $uninstall {
+      Exec[$uninstall_cmd] -> Exec[$install_cmd]
+    }
+
+    if ('update-available' in $current_state) and $automatic_hub_updates {
+      $update_cmd = "cscli ${module_type} upgrade ${module_name} --force"
+      exec { $update_cmd:
+        path  => $facts['path'],
+        user  => $crowdsec::user,
+        group => $crowdsec::group,
+      }
     }
   }
 }

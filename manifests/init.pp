@@ -59,6 +59,31 @@
 # @param service_name
 # Name of the service used to control the crowdsec daemon.
 #
+# @param manage_modules
+# Remove modules/configs that are not installed by puppet
+#
+# @param parsers
+# Either the name of the module or an array, containing the module name and
+# all the params to pass to crowdsec::module to install the module.
+#
+# @param postoverflows
+# See parsers
+#
+# @param scenarios
+# See parsers
+#
+# @param contexts
+# See parsers
+#
+# @param appsec_configs
+# See parsers
+#
+# @param appsec_rules
+# See parsers
+#
+# @param collections
+# See parsers
+#
 class crowdsec (
   Hash $config = {},
   Boolean $manage_sources = true,
@@ -84,6 +109,24 @@ class crowdsec (
   Boolean $automatic_hub_updates = true,
   Stdlib::Absolutepath $config_basedir = $crowdsec::params::config_basedir,
   String $service_name = $crowdsec::params::service_name,
+  Boolean $manage_modules = true,
+  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $appsec_configs = [],
+  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $appsec_rules = [],
+  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $collections = ['crowdsecurity/linux', 'crowdsecurity/sshd'],
+  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $contexts = ['crowdsecurity/bf_base'],
+  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $parsers = [
+    'crowdsecurity/dateparse-enrich',
+    'crowdsecurity/geoip-enrich',
+    'crowdsecurity/sshd-logs',
+    'crowdsecurity/syslog-logs',
+    'crowdsecurity/whitelists',
+  ],
+  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $postoverflows = ['crowdsecurity/cdn-whitelist'],
+  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $scenarios = [
+    'crowdsecurity/ssh-bf',
+    'crowdsecurity/ssh-cve-2024-6387',
+    'crowdsecurity/ssh-slow-bf',
+  ],
 ) inherits crowdsec::params {
   if $run_as_root {
     $user = 'root'
@@ -189,5 +232,51 @@ class crowdsec (
     ),
     require => Package['crowdsec'],
     notify  => Service['crowdsec.service'],
+  }
+
+  [
+    'parsers',
+    'postoverflows',
+    'scenarios',
+    'contexts',
+    'appsec-configs',
+    'appsec-rules',
+    'collections',
+  ].each |$module_type| {
+    $_varname = regsubst($module_type, /-/, '_', 'G')
+    getvar($_varname).each|$module| {
+      if $module =~ Array {
+        crowdsec::module { $module[0]:
+          * => $module[1],
+        }
+      } else {
+        crowdsec::module { "${module_type}-${module}":
+          module_type => $module_type,
+          module_name => $module,
+        }
+      }
+    }
+    if $manage_modules {
+      $_modules = getvar($_varname).map|$module| {
+        if $module =~ Array {
+          $module[0]
+        } else {
+          $module
+        }
+      }
+      $_uninstall_modules = pick_default($facts.dig('crowdsec', $module_type), []).filter|$_m| {
+        $_m['status'] =~ /enabled/
+      }.map|$_m| {
+        $_m['name']
+      }.filter|$_m| {
+        !($_m in $_modules)
+      }.each|$_m| {
+        crowdsec::module { "${module_type}-${_m}":
+          ensure      => absent,
+          module_type => $module_type,
+          module_name => $_m,
+        }
+      }
+    }
   }
 }
