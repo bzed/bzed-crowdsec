@@ -110,19 +110,22 @@ class crowdsec (
   Stdlib::Absolutepath $config_basedir = $crowdsec::params::config_basedir,
   String $service_name = $crowdsec::params::service_name,
   Boolean $manage_modules = true,
-  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $appsec_configs = [],
-  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $appsec_rules = [],
-  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $collections = ['crowdsecurity/linux', 'crowdsecurity/sshd'],
-  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $contexts = ['crowdsecurity/bf_base'],
-  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $parsers = [
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $appsec_configs = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $appsec_rules = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $collections = [
+    'crowdsecurity/linux',
+    'crowdsecurity/sshd',
+  ],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $contexts = ['crowdsecurity/bf_base'],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $parsers = [
     'crowdsecurity/dateparse-enrich',
     'crowdsecurity/geoip-enrich',
     'crowdsecurity/sshd-logs',
     'crowdsecurity/syslog-logs',
     'crowdsecurity/whitelists',
   ],
-  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $postoverflows = ['crowdsecurity/cdn-whitelist'],
-  Variant[Crowdsec::Module_name, Array[Crowdsec::Module_name, Hash]] $scenarios = [
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $postoverflows = ['crowdsecurity/cdn-whitelist'],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $scenarios = [
     'crowdsecurity/ssh-bf',
     'crowdsecurity/ssh-cve-2024-6387',
     'crowdsecurity/ssh-slow-bf',
