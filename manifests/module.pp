@@ -45,8 +45,8 @@ define crowdsec::module (
   Enum['present', 'absent'] $ensure = 'present',
   Hash[Pattern[/[a-z]+/], String] $install_options = {},
   Crowdsec::Module_name $module_name = $name,
-  String $source = undef,
-  String $content = undef,
+  Optional[String] $source = undef,
+  Optional[String] $content = undef,
 ) {
   include crowdsec
 
