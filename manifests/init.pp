@@ -110,22 +110,22 @@ class crowdsec (
   Stdlib::Absolutepath $config_basedir = $crowdsec::params::config_basedir,
   String $service_name = $crowdsec::params::service_name,
   Boolean $manage_modules = true,
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $appsec_configs = [],
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $appsec_rules = [],
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $collections = [
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $appsec_configs = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $appsec_rules = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $collections = [
     'crowdsecurity/linux',
     'crowdsecurity/sshd',
   ],
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $contexts = ['crowdsecurity/bf_base'],
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $parsers = [
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $contexts = ['crowdsecurity/bf_base'],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $parsers = [
     'crowdsecurity/dateparse-enrich',
     'crowdsecurity/geoip-enrich',
     'crowdsecurity/sshd-logs',
     'crowdsecurity/syslog-logs',
     'crowdsecurity/whitelists',
   ],
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $postoverflows = ['crowdsecurity/cdn-whitelist'],
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]]] $scenarios = [
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $postoverflows = ['crowdsecurity/cdn-whitelist'],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $scenarios = [
     'crowdsecurity/ssh-bf',
     'crowdsecurity/ssh-cve-2024-6387',
     'crowdsecurity/ssh-slow-bf',
