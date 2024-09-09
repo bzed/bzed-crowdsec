@@ -26,7 +26,7 @@
 #   --foo bar
 # being pass as option to cscli .... install.
 #
-# @param module_name
+# @param module
 # Defaults to $name. Sets the name of the hub module to install/uninstall.
 #
 # @param source
@@ -44,14 +44,14 @@ define crowdsec::module (
   Crowdsec::Module_type $module_type,
   Enum['present', 'absent'] $ensure = 'present',
   Hash[Pattern[/[a-z]+/], String] $install_options = {},
-  Crowdsec::Module_name $module_name = $name,
+  Crowdsec::Module_name $module = $name,
   Optional[String] $source = undef,
   Optional[String] $content = undef,
 ) {
   include crowdsec
 
   $_current_state = pick_default($facts.dig('crowdsec', $module_type), []).filter |$_module| {
-    $_module['name'] == $module_name
+    $_module['name'] == $module
   }
   if $_current_state {
     $module_file = $_current_state[0]['local_path']
@@ -69,7 +69,7 @@ define crowdsec::module (
     $install_command = 'uninstall'
   }
 
-  $_module_name_parts = split($module_name, '/')
+  $_module_name_parts = split($module, '/')
   $module_source = $_module_name_parts[0]
   $module_filename_part = $_module_name_parts[1]
 
@@ -100,9 +100,9 @@ define crowdsec::module (
       notify  => Service[$crowdsec::service_name],
     }
   } else {
-    $uninstall_cmd = "cscli ${module_type} remove ${module_name}"
+    $uninstall_cmd = "cscli ${module_type} remove ${module}"
     $install_flags = shellquote(Array($install_options))
-    $install_cmd = "cscli ${module_type} remove ${module_name} ${install_flags}"
+    $install_cmd = "cscli ${module_type} remove ${module} ${install_flags}"
 
     if ($ensure == 'absent') {
       $uninstall = ('enabled' in $current_state)
@@ -136,7 +136,7 @@ define crowdsec::module (
     }
 
     if ('update-available' in $current_state) and $automatic_hub_updates {
-      $update_cmd = "cscli ${module_type} upgrade ${module_name} --force"
+      $update_cmd = "cscli ${module_type} upgrade ${module} --force"
       exec { $update_cmd:
         path  => $facts['path'],
         user  => $crowdsec::user,

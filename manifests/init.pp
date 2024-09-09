@@ -255,7 +255,7 @@ class crowdsec (
       } else {
         crowdsec::module { "${module_type}-${module}":
           module_type => $module_type,
-          module_name => $module,
+          module      => $module,
         }
       }
     }
