@@ -50,6 +50,10 @@ define crowdsec::module (
 ) {
   include crowdsec
 
+  $_module_name_parts = split($module, '/')
+  $module_source = $_module_name_parts[0]
+  $module_filename_part = $_module_name_parts[1]
+
   $_current_state = pick_default($facts.dig('crowdsec', $module_type), []).filter |$_module| {
     $_module['name'] == $module
   }
@@ -62,10 +66,6 @@ define crowdsec::module (
   }
   $local = ($source =~ String or $content =~ String or 'local' in $current_state)
   $automatic_hub_updates = $crowdsec::automatic_hub_updates
-
-  $_module_name_parts = split($module, '/')
-  $module_source = $_module_name_parts[0]
-  $module_filename_part = $_module_name_parts[1]
 
 # func (s *ItemState) Text() string {
 # 	ret := "disabled"
@@ -112,25 +112,28 @@ define crowdsec::module (
       if ('update-available' in $current_state) and $automatic_hub_updates {
         $update_cmd = "cscli ${module_type} upgrade ${module} --force"
         exec { $update_cmd:
-          path  => $facts['path'],
-          user  => $crowdsec::user,
-          group => $crowdsec::group,
+          path    => $facts['path'],
+          user    => $crowdsec::user,
+          group   => $crowdsec::group,
+          require => Service[$crowdsec::service_name],
         }
       }
     }
 
     if $uninstall {
       exec { $uninstall_cmd:
-        path  => $facts['path'],
-        user  => $crowdsec::user,
-        group => $crowdsec::group,
+        path    => $facts['path'],
+        user    => $crowdsec::user,
+        group   => $crowdsec::group,
+        require => Service[$crowdsec::service_name],
       }
     }
     if $install {
       exec { $install_cmd:
-        path  => $facts['path'],
-        user  => $crowdsec::user,
-        group => $crowdsec::group,
+        path    => $facts['path'],
+        user    => $crowdsec::user,
+        group   => $crowdsec::group,
+        require => Service[$crowdsec::service_name],
       }
     }
     if $install and $uninstall {
