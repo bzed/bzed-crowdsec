@@ -53,12 +53,12 @@ define crowdsec::module (
   $_current_state = pick_default($facts.dig('crowdsec', $module_type), []).filter |$_module| {
     $_module['name'] == $module
   }
-  if $_current_state {
-    $module_file = $_current_state[0]['local_path']
-    $current_state = $_current_state[0]['status'].split(',')
-  } else {
+  if $_current_state.empty() {
     $module_file = "${crowdsec::config_basedir}/${module_type}/${module_filename_part}.yaml"
     $current_state = ['disabled']
+  } else {
+    $module_file = $_current_state[0]['local_path']
+    $current_state = $_current_state[0]['status'].split(',')
   }
   $local = ($source =~ String or $content =~ String or 'local' in $current_state)
   $automatic_hub_updates = $crowdsec::automatic_hub_updates
