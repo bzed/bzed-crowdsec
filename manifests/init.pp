@@ -14,7 +14,7 @@
 #
 # @param local_api_url
 # The local api url crowdsec should connect to. Defaults to http://127.0.0.1:8080
-# 
+#
 # @param local_api_login
 # The login/user used to authenticate against the local api server.
 #
@@ -60,7 +60,9 @@
 # Name of the service used to control the crowdsec daemon.
 #
 # @param manage_modules
-# Remove modules/configs that are not installed by puppet
+# Remove modules/configs that are not installed by puppet.
+# Keep in mind that this *will* break collections - you will have to list everything
+# contained by a collection manually.
 #
 # @param parsers
 # Either the name of the module or an array, containing the module name and
@@ -109,7 +111,7 @@ class crowdsec (
   Boolean $automatic_hub_updates = true,
   Stdlib::Absolutepath $config_basedir = $crowdsec::params::config_basedir,
   String $service_name = $crowdsec::params::service_name,
-  Boolean $manage_modules = true,
+  Boolean $manage_modules = false,
   Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $appsec_configs = [],
   Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $appsec_rules = [],
   Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $collections = [
