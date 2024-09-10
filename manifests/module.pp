@@ -109,6 +109,14 @@ define crowdsec::module (
         $uninstall = false
         $install = !('enabled' in $current_state)
       }
+      if ('update-available' in $current_state) and $automatic_hub_updates {
+        $update_cmd = "cscli ${module_type} upgrade ${module} --force"
+        exec { $update_cmd:
+          path  => $facts['path'],
+          user  => $crowdsec::user,
+          group => $crowdsec::group,
+        }
+      }
     }
 
     if $uninstall {
@@ -127,15 +135,6 @@ define crowdsec::module (
     }
     if $install and $uninstall {
       Exec[$uninstall_cmd] -> Exec[$install_cmd]
-    }
-
-    if ('update-available' in $current_state) and $automatic_hub_updates {
-      $update_cmd = "cscli ${module_type} upgrade ${module} --force"
-      exec { $update_cmd:
-        path  => $facts['path'],
-        user  => $crowdsec::user,
-        group => $crowdsec::group,
-      }
     }
   }
 }
