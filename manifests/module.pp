@@ -102,7 +102,7 @@ define crowdsec::module (
   } else {
     $uninstall_cmd = "cscli ${module_type} remove ${module}"
     $install_flags = shellquote(Array($install_options))
-    $install_cmd = "cscli ${module_type} remove ${module} ${install_flags}"
+    $install_cmd = "cscli ${module_type} install ${module} ${install_flags}".strip()
 
     if ($ensure == 'absent') {
       $uninstall = ('enabled' in $current_state)
