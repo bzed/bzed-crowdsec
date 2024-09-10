@@ -63,12 +63,6 @@ define crowdsec::module (
   $local = ($source =~ String or $content =~ String or 'local' in $current_state)
   $automatic_hub_updates = $crowdsec::automatic_hub_updates
 
-  if ($ensure == 'present') {
-    $install_command = 'install'
-  } else {
-    $install_command = 'uninstall'
-  }
-
   $_module_name_parts = split($module, '/')
   $module_source = $_module_name_parts[0]
   $module_filename_part = $_module_name_parts[1]
