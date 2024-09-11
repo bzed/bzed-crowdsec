@@ -118,20 +118,10 @@ class crowdsec (
     'crowdsecurity/linux',
     'crowdsecurity/sshd',
   ],
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $contexts = ['crowdsecurity/bf_base'],
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $parsers = [
-    'crowdsecurity/dateparse-enrich',
-    'crowdsecurity/geoip-enrich',
-    'crowdsecurity/sshd-logs',
-    'crowdsecurity/syslog-logs',
-    'crowdsecurity/whitelists',
-  ],
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $postoverflows = ['crowdsecurity/cdn-whitelist'],
-  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $scenarios = [
-    'crowdsecurity/ssh-bf',
-    'crowdsecurity/ssh-cve-2024-6387',
-    'crowdsecurity/ssh-slow-bf',
-  ],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $contexts = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $parsers = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $postoverflows = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $scenarios = [],
 ) inherits crowdsec::params {
   if $run_as_root {
     $user = 'root'
