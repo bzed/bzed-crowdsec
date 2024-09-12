@@ -96,18 +96,22 @@ define crowdsec::module (
   } else {
     $uninstall_cmd = "cscli ${module_type} remove ${module}"
     $install_flags = shellquote(Array($install_options))
-    $install_cmd = "cscli ${module_type} install ${module} ${install_flags}".strip()
+    $install_cmd = "cscli ${module_type} install ${module} --force ${install_flags}".strip()
 
     if ($ensure == 'absent') {
       $uninstall = ('enabled' in $current_state)
       $install = false
     } else {
-      if 'tainted' in $current_state {
-        $uninstall = true
-        $install = true
-      } else {
-        $uninstall = false
-        $install = !('enabled' in $current_state)
+      if 'tainted' in $current_state or !('enabled' in $current_state) {
+        exec { $install_cmd:
+          path    => $facts['path'],
+          user    => $crowdsec::user,
+          group   => $crowdsec::group,
+          require => [
+            Package['crowdsec'],
+            Service[$crowdsec::service_name],
+          ],
+        }
       }
       if ('update-available' in $current_state) and $automatic_hub_updates {
         $update_cmd = "cscli ${module_type} upgrade ${module} --force"
@@ -115,29 +119,22 @@ define crowdsec::module (
           path    => $facts['path'],
           user    => $crowdsec::user,
           group   => $crowdsec::group,
-          require => Service[$crowdsec::service_name],
+          require => [
+            Package['crowdsec'],
+            Service[$crowdsec::service_name],
+          ],
         }
       }
     }
 
     if $uninstall {
       exec { $uninstall_cmd:
-        path    => $facts['path'],
-        user    => $crowdsec::user,
-        group   => $crowdsec::group,
-        require => Service[$crowdsec::service_name],
+        path   => $facts['path'],
+        user   => $crowdsec::user,
+        group  => $crowdsec::group,
+        before => Package['crowdsec'],
+        onlyif => 'cscli version',
       }
-    }
-    if $install {
-      exec { $install_cmd:
-        path    => $facts['path'],
-        user    => $crowdsec::user,
-        group   => $crowdsec::group,
-        require => Service[$crowdsec::service_name],
-      }
-    }
-    if $install and $uninstall {
-      Exec[$uninstall_cmd] -> Exec[$install_cmd]
     }
   }
 }
