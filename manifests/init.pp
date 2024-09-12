@@ -185,7 +185,9 @@ class crowdsec (
   }
 
   package { 'crowdsec':
-    ensure => installed,
+    # this is necessary to make sure modules don't show up as tainted just because
+    # the engine is too old.
+    ensure => latest,
   }
 
   service { $service_name:
