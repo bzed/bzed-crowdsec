@@ -244,7 +244,7 @@ class crowdsec (
     getvar($_varname).each|$module| {
       if $module =~ Array {
         crowdsec::module { $module[0]:
-          * => $module[1],
+          * => { 'module_type' => $module_type } + $module[1],
         }
       } else {
         crowdsec::module { "${module_type}-${module}":
