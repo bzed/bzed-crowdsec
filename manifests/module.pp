@@ -35,6 +35,9 @@
 # @param content
 # Module is not from the hub, use this content for the file.
 #
+# @param module_subtype
+# "module_subtype" of the module, for example s01-parse to install in crowdsec/parsers/s01-parse
+#
 # @example
 #   crowdsec::module { 'crowdsecurity/ssh-bf':
 #     type => 'collections',
@@ -47,6 +50,7 @@ define crowdsec::module (
   Crowdsec::Module_name $module = $name,
   Optional[String] $source = undef,
   Optional[String] $content = undef,
+  Optional[String] $module_subtype = undef,
 ) {
   include crowdsec
 
@@ -58,7 +62,12 @@ define crowdsec::module (
     $_module['name'] == $module
   }
   if $_current_state.empty() {
-    $module_file = "${crowdsec::config_basedir}/${module_type}/${module_filename_part}.yaml"
+    $module_file = [
+      $crowdsec::config_basedir,
+      $module_type,
+      $module_subtype,
+      "${module_filename_part}.yaml",
+    ].delete_undef_values().join('/')
     $current_state = ['disabled']
   } else {
     $module_file = $_current_state[0]['local_path']
