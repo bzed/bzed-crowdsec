@@ -2,9 +2,11 @@
   "name": "bzed-crowdsec",
   "version": "0.0.1",
   "author": "bzed",
-  "summary": "",
+  "summary": "Puppet module to manage crowdsec installations and configurations",
   "license": "Apache-2.0",
-  "source": "",
+  "source": "https://github.com/bzed/bzed-crowdsec",
+  "project_page": "https://bzed.github.io/bzed-crowdsec/",
+  "issues_url": "https://github.com/bzed/bzed-crowdsec/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
