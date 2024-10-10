@@ -5,13 +5,13 @@
 # @example
 #   include crowdsec::local_api
 class crowdsec::local_api {
-
   include crowdsec
   $user = $crowdsec::user
   $group = $crowdsec::group
   $local_api_url = $crowdsec::local_api_url
   $local_api_login = $crowdsec::local_api_login
 
+  # lint:ignore:strict_indent
   $query =  @("EOF":json)
     ["from", "resources",
       [ "extract",
@@ -30,6 +30,7 @@ class crowdsec::local_api {
       ]
     ]
   | EOF
+  # lint:endignore
 
   $puppetdb_query_data = puppetdb_query($query)
   $crowdsec_machine_ids_to_certname = Hash(
@@ -63,7 +64,6 @@ class crowdsec::local_api {
     $machine_id = $m['machineId']
 
     if !($machine_id in $exported_lapi_machines) {
-
       exec { "remove-${machine_id}":
         path    => $facts['path'],
         command => "/usr/bin/cscli machines delete '${machine_id}'",
@@ -92,11 +92,9 @@ class crowdsec::local_api {
     }
   }
 
-
   # FIXME - remove later
   file { '/etc/facter/facts.d/crowdsec.json':
     ensure => absent,
     force  => true,
   }
-
 }

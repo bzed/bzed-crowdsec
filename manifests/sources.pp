@@ -2,16 +2,17 @@
 #
 # setup apt sources lists and necessary keys.
 #
+# @param keyring_source
+# Source of the keyring to install into apt
+#
+# @param include_sources
+# If true, a src apt source will be added
 # @example
 #   include crowdsec::sources
 class crowdsec::sources (
   String $keyring_source = 'puppet:///modules/crowdsec/crowdsec-archive-keyring.gpg',
   Boolean $include_sources = false,
-){
-
-  # deb https://packagecloud.io/crowdsec/crowdsec/ubuntu trusty main
-  # deb-src https://packagecloud.io/crowdsec/crowdsec/ubuntu trusty maina
-
+) {
   $distro = $facts['os']['distro']['id'].downcase()
   apt::source { 'crowdsec':
     location => "https://packagecloud.io/crowdsec/crowdsec/${distro}",
