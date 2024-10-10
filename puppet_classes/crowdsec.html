@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Puppet Class: crowdsec
+  
+    &mdash; Documentation by YARD 0.9.36
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "puppet_classes::crowdsec";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (c)</a> &raquo;
+    <span class='title'><span class='object_link'>Puppet Classes</span></span>
+     &raquo; 
+    <span class="title">crowdsec</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Puppet Class: crowdsec</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd><span class='object_link'><a href="crowdsec_3A_3Aparams.html" title="puppet_classes::crowdsec::params (puppet_class)">crowdsec::params</a></span></dd>
+  </dl>
+  
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/init.pp
+    </dd>
+  </dl>
+</div>
+
+  <h2>Summary</h2>
+  Install and manage crowdsec
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>The whole config part that should go into config.yaml.local. $<a href="'api'">config</a>[‘<a href="'enable'">server’]</a> is overwritten in case $local_api_puppet_certname is set and == $<a href="'certname'">trusted</a></p>
+
+<p>Setup apt sources from the crowdsec repositories. Defaults to true.</p>
+
+<p>The local api url crowdsec should connect to. Defaults to <a href="http://127.0.0.1:8080">127.0.0.1:8080</a></p>
+
+<p>The login/user used to authenticate against the local api server.</p>
+
+<p>The password used to login on the local api server.</p>
+
+<p>Use a hash over fqdn and password instead of the puppet certname. This sounds weird, but it makes sure that we update user/password in case the password changes. There is not way to verify an existing password unfortunately. Don’t disable if you plan to connect to the central API.</p>
+
+<p>If this option is set and matches $<a href="'certname'">trusted</a>, enable the local api and collect host registrations exported for that certname.</p>
+
+<p>Nobody reads the documentation. If you actually did so, raise this number: 0 Pull requests for it are fine!</p>
+
+<p>Set this to true if you really want to run the local api server without TLS. Absolutely not recommended.</p>
+
+<p>Register machine automatically if $local_api_url and $local_api_puppet_certname is configured properly.</p>
+
+<p>Configure crowdsec to run as LAPI server</p>
+
+<p>Defaults to true, when false we configure a user/group for crowdsec.</p>
+
+<p>Update packages from the crowdsec hub automatically. Defaults to true.</p>
+
+<p>Base directory for all crowdsec config files.</p>
+
+<p>Name of the service used to control the crowdsec daemon.</p>
+
+<p>Remove modules/configs that are not installed by puppet. Keep in mind that this <em>will</em> break collections - you will have to list everything contained by a collection manually.</p>
+
+<p>Either the name of the module or an array, containing the module name and all the params to pass to crowdsec::module to install the module.</p>
+
+<p>See parsers</p>
+
+<p>See parsers</p>
+
+<p>See parsers</p>
+
+<p>See parsers</p>
+
+<p>See parsers</p>
+
+<p>See parsers</p>
+
+  </div>
+</div>
+
+
+
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code><span class='id identifier rubyid_include'>include</span> <span class='id identifier rubyid_crowdsec'>crowdsec</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>config</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>manage_sources</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>local_api_url</span>
+      
+      
+        <span class='type'>(<tt>Stdlib::HTTPUrl</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;http://127.0.0.1:8080&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>local_api_login</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>if $use_anonymous_api_logins {
+    sha256(&quot;${trusted[&#39;certname&#39;]} ${local_api_password}&quot;)
+  } else {
+    $trusted[&#39;certname&#39;]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>local_api_password</span>
+      
+      
+        <span class='type'>(<tt>Sensitive[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>Sensitive(
+    fqdn_rand_string(
+      32,
+      undef,
+      $facts[&#39;networking&#39;][&#39;mac&#39;],
+    )
+  )</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>use_anonymous_api_logins</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>local_api_puppet_certname</span>
+      
+      
+        <span class='type'>(<tt>Optional[Stdlib::Fqdn]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>force_local_api_no_tls</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>register_machine</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>($local_api_url != &#39;http://127.0.0.1:8080&#39;) and $local_api_puppet_certname</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>enable_local_api</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$local_api_puppet_certname and $local_api_puppet_certname == $trusted[&#39;certname&#39;]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>run_as_root</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>!$enable_local_api</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>automatic_hub_updates</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>config_basedir</span>
+      
+      
+        <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$crowdsec::params::config_basedir</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>service_name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$crowdsec::params::service_name</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>manage_modules</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>parsers</span>
+      
+      
+        <span class='type'>(<tt>Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>postoverflows</span>
+      
+      
+        <span class='type'>(<tt>Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>scenarios</span>
+      
+      
+        <span class='type'>(<tt>Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>contexts</span>
+      
+      
+        <span class='type'>(<tt>Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>appsec_configs</span>
+      
+      
+        <span class='type'>(<tt>Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>appsec_rules</span>
+      
+      
+        <span class='type'>(<tt>Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>collections</span>
+      
+      
+        <span class='type'>(<tt>Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[
+    &#39;crowdsecurity/linux&#39;,
+    &#39;crowdsecurity/sshd&#39;,
+  ]</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 89</span>
+
+class crowdsec (
+  Hash $config = {},
+  Boolean $manage_sources = true,
+  Stdlib::HTTPUrl $local_api_url = &#39;http://127.0.0.1:8080&#39;,
+  Boolean $use_anonymous_api_logins = true,
+  Optional[Stdlib::Fqdn] $local_api_puppet_certname = undef,
+  Sensitive[String] $local_api_password = Sensitive(
+    fqdn_rand_string(
+      32,
+      undef,
+      $facts[&#39;networking&#39;][&#39;mac&#39;],
+    )
+  ),
+  String $local_api_login = if $use_anonymous_api_logins {
+    sha256(&quot;${trusted[&#39;certname&#39;]} ${local_api_password}&quot;)
+  } else {
+    $trusted[&#39;certname&#39;]
+  },
+  Boolean $force_local_api_no_tls = false,
+  Boolean $register_machine = ($local_api_url != &#39;http://127.0.0.1:8080&#39;) and $local_api_puppet_certname,
+  Boolean $enable_local_api = $local_api_puppet_certname and $local_api_puppet_certname == $trusted[&#39;certname&#39;],
+  Boolean $run_as_root = !$enable_local_api,
+  Boolean $automatic_hub_updates = true,
+  Stdlib::Absolutepath $config_basedir = $crowdsec::params::config_basedir,
+  String $service_name = $crowdsec::params::service_name,
+  Boolean $manage_modules = false,
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $appsec_configs = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $appsec_rules = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $collections = [
+    &#39;crowdsecurity/linux&#39;,
+    &#39;crowdsecurity/sshd&#39;,
+  ],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $contexts = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $parsers = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $postoverflows = [],
+  Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $scenarios = [],
+) inherits crowdsec::params {
+  if $run_as_root {
+    $user = &#39;root&#39;
+    $group = &#39;root&#39;
+  } else {
+    $user = &#39;crowdsec&#39;
+    $group = &#39;crowdsec&#39;
+
+    group { $group:
+      system =&gt; true,
+    }
+    user { $user:
+      system =&gt; true,
+      home   =&gt; &#39;/var/lib/crowdsec&#39;,
+      gid    =&gt; $group,
+    }
+
+    systemd::manage_dropin { &#39;crowdsec_as_non_root.conf&#39;:
+      unit          =&gt; $service_name,
+      notify        =&gt; Service[$service_name],
+      service_entry =&gt; {
+        &#39;User&#39;                =&gt; $user,
+        &#39;Group&#39;               =&gt; $group,
+        &#39;AmbientCapabilities&#39; =&gt; &#39;CAP_NET_BIND_SERVICE&#39;,
+      },
+    }
+  }
+
+  file { [$config_basedir, &#39;/var/log/crowdsec&#39;, &#39;/var/lib/crowdsec&#39;]:
+    ensure  =&gt; directory,
+    owner   =&gt; $user,
+    group   =&gt; $group,
+    recurse =&gt; true,
+  }
+
+  if $manage_sources {
+    include crowdsec::sources
+    Class[&#39;crowdsec::sources&#39;] -&gt; Package[&#39;crowdsec&#39;]
+  }
+
+  $default_config = {
+    &#39;common&#39; =&gt; {
+      &#39;log_dir&#39; =&gt; &#39;/var/log/crowdsec&#39;,
+    },
+  }
+  $local_api_config = {
+    &#39;api&#39; =&gt; {
+      &#39;server&#39; =&gt; {
+        &#39;enable&#39; =&gt; $enable_local_api,
+      },
+    },
+  }
+
+  $local_config = $default_config + $local_api_config + $config
+  if !$force_local_api_no_tls and $enable_local_api {
+    $tls_cert = $local_config.dig(&#39;api&#39;, &#39;server&#39;, &#39;tls&#39;, &#39;cert_file&#39;)
+    $tls_key = $local_config.dig(&#39;api&#39;, &#39;server&#39;, &#39;tls&#39;, &#39;key_file&#39;)
+    if !($tls_cert and $tls_key) {
+      fail(&#39;Please configure TLS for the crodsec local API (or set $force_local_api_no_tls to true).&#39;)
+    }
+  }
+
+  package { &#39;crowdsec&#39;:
+    # this is necessary to make sure modules don&#39;t show up as tainted just because
+    # the engine is too old.
+    ensure =&gt; latest,
+  }
+
+  service { $service_name:
+    ensure  =&gt; &#39;running&#39;,
+    enable  =&gt; &#39;true&#39;,
+    require =&gt; Package[&#39;crowdsec&#39;],
+  }
+
+  file { &quot;${config_basedir}/config.yaml.local&quot;:
+    ensure  =&gt; file,
+    owner   =&gt; $user,
+    group   =&gt; $group,
+    mode    =&gt; &#39;0640&#39;,
+    content =&gt; to_yaml($local_config),
+    require =&gt; Package[&#39;crowdsec&#39;],
+    notify  =&gt; Service[&#39;crowdsec.service&#39;],
+  }
+
+  if $enable_local_api {
+    include crowdsec::local_api
+  }
+
+  @@crowdsec::local_api::register { $local_api_login :
+    password =&gt; $local_api_password.unwrap,
+    tag      =&gt; $local_api_puppet_certname,
+  }
+
+  file { &quot;${config_basedir}/local_api_credentials.yaml&quot;:
+    ensure  =&gt; file,
+    owner   =&gt; $user,
+    group   =&gt; $group,
+    mode    =&gt; &#39;0600&#39;,
+    content =&gt; to_yaml(
+      {
+        &#39;url&#39;      =&gt; $local_api_url,
+        &#39;login&#39;    =&gt; $local_api_login,
+        &#39;password&#39; =&gt; $local_api_password.unwrap,
+      }
+    ),
+    require =&gt; Package[&#39;crowdsec&#39;],
+    notify  =&gt; Service[&#39;crowdsec.service&#39;],
+  }
+
+  [
+    &#39;parsers&#39;,
+    &#39;postoverflows&#39;,
+    &#39;scenarios&#39;,
+    &#39;contexts&#39;,
+    &#39;appsec-configs&#39;,
+    &#39;appsec-rules&#39;,
+    &#39;collections&#39;,
+  ].each |$module_type| {
+    $_varname = regsubst($module_type, /-/, &#39;_&#39;, &#39;G&#39;)
+    getvar($_varname).each|$module| {
+      if $module =~ Array {
+        crowdsec::module { $module[0]:
+          * =&gt; { &#39;module_type&#39; =&gt; $module_type } + $module[1],
+        }
+      } else {
+        crowdsec::module { &quot;${module_type}-${module}&quot;:
+          module_type =&gt; $module_type,
+          module      =&gt; $module,
+        }
+      }
+    }
+    if $manage_modules {
+      $_modules = getvar($_varname).map|$module| {
+        if $module =~ Array {
+          $module[0]
+        } else {
+          $module
+        }
+      }
+      $_uninstall_modules = pick_default($facts.dig(&#39;crowdsec&#39;, $module_type), []).filter|$_m| {
+        $_m[&#39;status&#39;] =~ /enabled/
+      }.map|$_m| {
+        $_m[&#39;name&#39;]
+      }.filter|$_m| {
+        !($_m in $_modules)
+      }.each|$_m| {
+        crowdsec::module { &quot;${module_type}-${_m}&quot;:
+          ensure      =&gt; absent,
+          module_type =&gt; $module_type,
+          module_name =&gt; $_m,
+        }
+      }
+    }
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>

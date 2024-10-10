@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: crowdsec::module
+  
+    &mdash; Documentation by YARD 0.9.36
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "puppet_defined_types::crowdsec::module";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (c)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">crowdsec::module</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Defined Type: crowdsec::module</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/module.pp
+    </dd>
+  </dl>
+</div>
+
+  <h2>Summary</h2>
+  Install crowdsec modules from the hub.
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>This rather generic defined_type allows to install all the different crowdsec parts that come directly from the crowdsec hub. - parsers - postoverflows - scenarios - contexts - appsec-configs - appsec-rules - collections</p>
+
+<p>Required parameter to specify the type of module to install from the hub (parsers, collections, .….)</p>
+
+<p>Set to ‘present’ to install, ‘absent’ to uninstall.</p>
+
+<p>Hash to specify necessay install options like API keys for the hub.  { ‘foo’ =&gt; ‘bar’ } results in  –foo bar being pass as option to cscli .… install.</p>
+
+<p>Defaults to $name. Sets the name of the hub module to install/uninstall.</p>
+
+<p>Module is not from the hub, use this source as source for the file.</p>
+
+<p>Module is not from the hub, use this content for the file.</p>
+
+<p>“module_subtype” of the module, for example s01-parse to install in crowdsec/parsers/s01-parse</p>
+
+  </div>
+</div>
+
+
+
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code>crowdsec::module { &#39;crowdsecurity/ssh-bf&#39;:
+  type =&gt; &#39;collections&#39;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>module_type</span>
+      
+      
+        <span class='type'>(<tt>Crowdsec::Module_type</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ensure</span>
+      
+      
+        <span class='type'>(<tt>Enum['present', 'absent']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>install_options</span>
+      
+      
+        <span class='type'>(<tt>Hash[Pattern[/[a-z]+/], String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>module</span>
+      
+      
+        <span class='type'>(<tt>Crowdsec::Module_name</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$name</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>source</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>content</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>module_subtype</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/module.pp', line 46</span>
+
+define crowdsec::module (
+  Crowdsec::Module_type $module_type,
+  Enum[&#39;present&#39;, &#39;absent&#39;] $ensure = &#39;present&#39;,
+  Hash[Pattern[/[a-z]+/], String] $install_options = {},
+  Crowdsec::Module_name $module = $name,
+  Optional[String] $source = undef,
+  Optional[String] $content = undef,
+  Optional[String] $module_subtype = undef,
+) {
+  include crowdsec
+
+  $_module_name_parts = split($module, &#39;/&#39;)
+  $module_source = $_module_name_parts[0]
+  $module_filename_part = $_module_name_parts[1]
+
+  $_current_state = pick_default($facts.dig(&#39;crowdsec&#39;, $module_type), []).filter |$_module| {
+    $_module[&#39;name&#39;] == $module
+  }
+  if $_current_state.empty() {
+    $module_file = [
+      $crowdsec::config_basedir,
+      $module_type,
+      $module_subtype,
+      &quot;${module_filename_part}.yaml&quot;,
+    ].delete_undef_values().join(&#39;/&#39;)
+    $current_state = [&#39;disabled&#39;]
+  } else {
+    $module_file = $_current_state[0][&#39;local_path&#39;]
+    $current_state = $_current_state[0][&#39;status&#39;].split(&#39;,&#39;)
+  }
+  $local = ($source =~ String or $content =~ String or &#39;local&#39; in $current_state)
+  $automatic_hub_updates = $crowdsec::automatic_hub_updates
+
+# func (s *ItemState) Text() string {
+# 	ret := &quot;disabled&quot;
+#
+# 	if s.Installed {
+# 		ret = &quot;enabled&quot;
+# 	}
+#
+# 	if s.IsLocal() {
+# 		ret += &quot;,local&quot;
+# 	}
+#
+# 	if s.Tainted {
+# 		ret += &quot;,tainted&quot;
+# 	} else if !s.UpToDate &amp;&amp; !s.IsLocal() {
+# 		ret += &quot;,update-available&quot;
+# 	}
+#
+# 	return ret
+
+  if $local {
+    file { $module_file:
+      ensure  =&gt; $ensure,
+      content =&gt; $content,
+      source  =&gt; $source,
+      notify  =&gt; Service[$crowdsec::service_name],
+    }
+  } else {
+    $uninstall_cmd = &quot;cscli ${module_type} remove ${module}&quot;
+    $install_flags = shellquote(Array($install_options))
+    $install_cmd = &quot;cscli ${module_type} install ${module} --force ${install_flags}&quot;.strip()
+
+    if ($ensure == &#39;absent&#39;) {
+      $uninstall = (&#39;enabled&#39; in $current_state)
+      $install = false
+    } else {
+      if &#39;tainted&#39; in $current_state or !(&#39;enabled&#39; in $current_state) {
+        exec { $install_cmd:
+          path    =&gt; $facts[&#39;path&#39;],
+          user    =&gt; $crowdsec::user,
+          group   =&gt; $crowdsec::group,
+          require =&gt; [
+            Package[&#39;crowdsec&#39;],
+            Service[$crowdsec::service_name],
+          ],
+        }
+      }
+      if (&#39;update-available&#39; in $current_state) and $automatic_hub_updates {
+        $update_cmd = &quot;cscli ${module_type} upgrade ${module} --force&quot;
+        exec { $update_cmd:
+          path    =&gt; $facts[&#39;path&#39;],
+          user    =&gt; $crowdsec::user,
+          group   =&gt; $crowdsec::group,
+          require =&gt; [
+            Package[&#39;crowdsec&#39;],
+            Service[$crowdsec::service_name],
+          ],
+        }
+      }
+    }
+
+    if $uninstall {
+      exec { $uninstall_cmd:
+        path   =&gt; $facts[&#39;path&#39;],
+        user   =&gt; $crowdsec::user,
+        group  =&gt; $crowdsec::group,
+        before =&gt; Package[&#39;crowdsec&#39;],
+        onlyif =&gt; &#39;cscli version&#39;,
+      }
+    }
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>
