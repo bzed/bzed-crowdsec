@@ -21,7 +21,7 @@ define crowdsec::local_api::manage (
   case $managed_type {
     'machines' : {
       $puppet_register_class = 'Crowdsec::Local_api::Register'
-      $id_to_certname_file = '/etc/crowdsec/crowdsec_registration_ids_to_certname.yaml'
+      $id_to_certname_file = '/etc/crowdsec/crowdsec_machine_ids_to_certname.yaml'
       $name_field = 'machineId'
     }
     'bouncers' : {
