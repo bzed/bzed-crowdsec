@@ -2,11 +2,16 @@
 #
 # A description of what this defined type does
 #
+# @param managed_type
+# Defaults to $name, either machines or bouncers.
+#
 # @example
 #   crowdsec::local_api::manage { 'namevar': }
 define crowdsec::local_api::manage (
   Enum['machines', 'bouncers'] $managed_type = $name,
 ) {
+  assert_private()
+
   include crowdsec
   $user = $crowdsec::user
   $group = $crowdsec::group
