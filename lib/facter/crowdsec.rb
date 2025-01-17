@@ -9,23 +9,15 @@ Facter.add(:crowdsec) do
     certnames_file = '/etc/crowdsec/crowdsec_machine_ids_to_certname.yaml'
     if Facter::Util::Resolution.which('cscli')
       output = {}
-      if File.exist?(certnames_file)
-        output['certnames'] = YAML.load_file(certnames_file)
-      end
+      output['certnames'] = YAML.load_file(certnames_file) if File.exist?(certnames_file)
       hub_data = Facter::Util::Resolution.exec('cscli hub list -o json')
-      unless hub_data.to_s.strip.empty?
-        output.merge!(JSON.parse(hub_data))
-      end
-      other_requests = ['machines', 'bouncers']
+      output.merge!(JSON.parse(hub_data)) unless hub_data.to_s.strip.empty?
+      other_requests = %w[machines bouncers]
       other_requests.each do |request|
         data = Facter::Util::Resolution.exec("cscli #{request} list -o json")
-        unless data.to_s.strip.empty?
-          output[request] = JSON.parse(data)
-        end
+        output[request] = JSON.parse(data) unless data.to_s.strip.empty?
       end
-      unless output.empty?
-        output
-      end
+      output unless output.empty?
     end
   end
 end
