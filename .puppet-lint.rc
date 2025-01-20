@@ -1,6 +1,9 @@
-# Managed by modulesync - DO NOT EDIT
-# https://voxpupuli.org/docs/updating-files-managed-with-modulesync/
-
 --fail-on-warnings
---no-parameter_documentation-check
---no-parameter_types-check
+--relative
+--no-80chars-check
+--no-140chars-check
+--no-class_inherits_from_params_class-check
+--no-autoloader_layout-check
+--no-documentation-check
+--no-single_quote_string_with_variables-check
+--ignore-paths=.vendor/**/*.pp,.bundle/**/*.pp,pkg/**/*.pp,spec/**/*.pp,tests/**/*.pp,types/**/*.pp,vendor/**/*.pp
