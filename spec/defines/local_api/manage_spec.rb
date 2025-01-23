@@ -3,9 +3,10 @@
 require 'spec_helper'
 
 describe 'crowdsec::local_api::manage' do
-  let(:title) { 'namevar' }
+  let(:title) { 'machines' }
   let(:params) do
-    {}
+    {
+    }
   end
 
   on_supported_os.each do |os, os_facts|

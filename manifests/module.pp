@@ -111,6 +111,7 @@ define crowdsec::module (
       $uninstall = ('enabled' in $current_state)
       $install = false
     } else {
+      $uninstall = false
       if 'tainted' in $current_state or !('enabled' in $current_state) {
         exec { $install_cmd:
           path    => $facts['path'],

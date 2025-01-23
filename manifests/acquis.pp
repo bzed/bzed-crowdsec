@@ -29,7 +29,7 @@ define crowdsec::acquis (
 
   file { "${acquis_d}/${acquis_name}.yaml":
     ensure  => file,
-    user    => $crowdsec::user,
+    owner   => $crowdsec::user,
     group   => $crowdsec::group,
     mode    => '0644',
     content => stdlib::to_yaml($config),

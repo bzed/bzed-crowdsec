@@ -6,7 +6,7 @@
 # Defaults to $name, either machines or bouncers.
 #
 # @example
-#   crowdsec::local_api::manage { 'namevar': }
+#   crowdsec::local_api::manage { 'machines': }
 define crowdsec::local_api::manage (
   Enum['machines', 'bouncers'] $managed_type = $name,
 ) {

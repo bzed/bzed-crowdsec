@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe 'crowdsec::module' do
-  let(:title) { 'namevar' }
+  let(:title) { 'crowdsec/mymodule' }
   let(:params) do
     {}
   end

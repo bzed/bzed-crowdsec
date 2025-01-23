@@ -178,8 +178,11 @@ class crowdsec (
   }
 
   $default_config = {
-    'common' => {
+    'common'           => {
       'log_dir' => '/var/log/crowdsec',
+    },
+    'crowdsec_service' => {
+      'acquisition_dir' => '/etc/crowdsec/acquis.d',
     },
   }
   $local_api_config = {
