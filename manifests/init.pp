@@ -64,9 +64,6 @@
 # Keep in mind that this *will* break collections - you will have to list everything
 # contained by a collection manually.
 #
-# @param enable_log_acquis
-# Enable to acquire logs, not enabled by default in case we run as root.
-#
 # @param parsers
 # Either the name of the module or an array, containing the module name and
 # all the params to pass to crowdsec::module to install the module.
@@ -115,7 +112,6 @@ class crowdsec (
   Stdlib::Absolutepath $config_basedir = $crowdsec::params::config_basedir,
   String $service_name = $crowdsec::params::service_name,
   Boolean $manage_modules = false,
-  Boolean $enable_log_acquis = $run_as_root,
   Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $appsec_configs = [],
   Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $appsec_rules = [],
   Tuple[Variant[Crowdsec::Module_name, Tuple[Crowdsec::Module_name, Hash, 2, 2]], 0] $collections = [
@@ -181,19 +177,13 @@ class crowdsec (
     Class['crowdsec::sources'] -> Package['crowdsec']
   }
 
-  if $enable_log_acquis {
-    $crowdsec_service = {}
-  } else {
-    $crowdsec_service = {
-      'acquisition_dir' => '/etc/crowdsec/acquis.d',
-    }
-  }
-
   $default_config = {
     'common'           => {
       'log_dir' => '/var/log/crowdsec',
     },
-    'crowdsec_service' => $crowdsec_service,
+    'crowdsec_service' => {
+      'acquisition_dir' => '/etc/crowdsec/acquis.d',
+    },
   }
   $local_api_config = {
     'api' => {
