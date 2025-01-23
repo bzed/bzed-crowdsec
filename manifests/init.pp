@@ -157,6 +157,21 @@ class crowdsec (
     recurse => true,
   }
 
+  file { "${config_basedir}/acquis.d":
+    ensure => directory,
+    owner  => $user,
+    group  => $group,
+    purge  => true,
+  }
+
+  file { "${config_basedir}/acquis.yaml":
+    ensure  => file,
+    owner   => $user,
+    group   => $group,
+    content => '# acquis managed by puppet.',
+    notify  => Service[$service_name],
+  }
+
   if $manage_sources {
     include crowdsec::sources
     Class['crowdsec::sources'] -> Package['crowdsec']
