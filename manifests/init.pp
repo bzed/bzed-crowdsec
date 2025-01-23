@@ -194,6 +194,8 @@ class crowdsec (
     },
   }
 
+  crowdsec::acquis::journald { 'sshd.service': }
+
   $local_config = $default_config + $local_api_config + $config
   if !$force_local_api_no_tls and $enable_local_api {
     $tls_cert = $local_config.dig('api', 'server', 'tls', 'cert_file')
