@@ -21,7 +21,7 @@
 #   }
 define crowdsec::acquis (
   Hash $config,
-  Pattern[/^[0-9a-zA-z_-]+$/] $acquis_name
+  Pattern[/^[0-9a-zA-z_-]+$/] $acquis_name = $name,
 ) {
   include crowdsec
 
