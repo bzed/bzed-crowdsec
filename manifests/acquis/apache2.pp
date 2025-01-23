@@ -10,7 +10,7 @@ class crowdsec::acquis::apache2 (
     default => ['/var/log/apache2/*.log', '/var/log/apache2/*/*.log'],
   },
 ) {
-  crowdsec::acquis::filenames { 'apache2':
+  crowdsec::acquis::files { 'apache2':
     filenames => $filenames,
     type      => 'apache2',
   }
