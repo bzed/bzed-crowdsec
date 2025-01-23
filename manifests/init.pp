@@ -181,7 +181,7 @@ class crowdsec (
     Class['crowdsec::sources'] -> Package['crowdsec']
   }
 
-  if !$enable_log_acquis {
+  if $enable_log_acquis {
     $crowdsec_service = {}
   } else {
     $crowdsec_service = {
