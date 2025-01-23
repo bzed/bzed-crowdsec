@@ -137,6 +137,7 @@ class crowdsec (
       system => true,
       home   => '/var/lib/crowdsec',
       gid    => $group,
+      groups => ['adm'],
     }
 
     systemd::manage_dropin { 'crowdsec_as_non_root.conf':
