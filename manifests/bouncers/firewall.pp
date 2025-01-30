@@ -56,5 +56,6 @@ class crowdsec::bouncers::firewall (
       Package[$package],
       Service[$crowdsec::service_name],
     ],
+    notify  => Service[$crowdsec::service_name],
   }
 }
