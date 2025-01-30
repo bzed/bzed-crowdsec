@@ -27,7 +27,14 @@ class crowdsec::bouncers::firewall (
   include crowdsec
 
   $package = "crowdsec-firewall-bouncer-${mode}"
+  $service = 'crowdsec-firewall-bouncer.service'
   ensure_packages([$package])
+
+  service { $service:
+    ensure  => 'running',
+    enable  => true,
+    require => Package[$package],
+  }
 
   $bouncer_name = "${trusted['certname']}_firewall-${mode}"
 
@@ -55,6 +62,6 @@ class crowdsec::bouncers::firewall (
     require => [
       Package[$package],
     ],
-    notify  => Service[$crowdsec::service_name],
+    notify  => Service[$service],
   }
 }
