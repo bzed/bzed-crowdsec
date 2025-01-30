@@ -51,7 +51,7 @@ class crowdsec::bouncers::firewall (
     owner   => $crowdsec::user,
     group   => $crowdsec::group,
     mode    => '0600',
-    content => to_yaml($final_config),
+    content => parseyaml($final_config),
     require => [
       Package[$package],
       Service[$crowdsec::service_name],
