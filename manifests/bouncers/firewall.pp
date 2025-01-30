@@ -54,7 +54,6 @@ class crowdsec::bouncers::firewall (
     content => to_yaml($final_config),
     require => [
       Package[$package],
-      Service[$crowdsec::service_name],
     ],
     notify  => Service[$crowdsec::service_name],
   }
