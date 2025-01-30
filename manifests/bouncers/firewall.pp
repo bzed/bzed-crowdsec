@@ -31,7 +31,7 @@ class crowdsec::bouncers::firewall (
 
   $bouncer_name = "${trusted['certname']}_firewall-${mode}"
 
-  @@crowdsec::bouncer::register { $bouncer_name:
+  @@crowdsec::bouncers::register { $bouncer_name:
     password => $api_key.unwrap,
   }
 
