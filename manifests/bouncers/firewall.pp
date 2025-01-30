@@ -41,7 +41,7 @@ class crowdsec::bouncers::firewall (
     'api_key'         => $api_key,
     'iptables_chains' => ['crowdsec'],
   }
-  $default_config = from_yaml(
+  $default_config = parseyaml(
     file('crowdsec/bouncers/crowdsec-firewall-bouncer.yaml')
   )
 
@@ -51,7 +51,7 @@ class crowdsec::bouncers::firewall (
     owner   => $crowdsec::user,
     group   => $crowdsec::group,
     mode    => '0600',
-    content => parseyaml($final_config),
+    content => to_yaml($final_config),
     require => [
       Package[$package],
       Service[$crowdsec::service_name],
