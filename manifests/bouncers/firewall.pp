@@ -40,6 +40,7 @@ class crowdsec::bouncers::firewall (
 
   @@crowdsec::bouncers::register { $bouncer_name:
     password => $api_key.unwrap,
+    tag      => $crowdsec::local_api_puppet_certname,
   }
 
   $bouncer_config = {
