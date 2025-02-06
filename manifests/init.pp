@@ -47,6 +47,10 @@
 # @param enable_local_api
 # Configure crowdsec to run as LAPI server
 #
+# @param enable_local_api_default_profiles
+# Load the default profiles into the local api server. Defaults as shipped with crowdsec.
+# You might want different profiles.
+#
 # @param run_as_root
 # Defaults to true, when false we configure a user/group for crowdsec.
 #
@@ -107,6 +111,7 @@ class crowdsec (
   Boolean $force_local_api_no_tls = false,
   Boolean $register_machine = ($local_api_url != 'http://127.0.0.1:8080') and $local_api_puppet_certname,
   Boolean $enable_local_api = $local_api_puppet_certname and $local_api_puppet_certname == $trusted['certname'],
+  Boolean $enable_local_api_default_profiles = $enable_local_api,
   Boolean $run_as_root = !$enable_local_api,
   Boolean $automatic_hub_updates = true,
   Stdlib::Absolutepath $config_basedir = $crowdsec::params::config_basedir,
@@ -229,6 +234,9 @@ class crowdsec (
 
   if $enable_local_api {
     include crowdsec::local_api
+    if $enable_local_api_default_profiles {
+      include crowdsec::local_api::default_profiles
+    }
   }
 
   @@crowdsec::local_api::register { $local_api_login :

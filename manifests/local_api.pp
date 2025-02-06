@@ -9,5 +9,12 @@
 class crowdsec::local_api {
   include crowdsec
 
+  $profiles_file = '/etc/crowdsec/profiles.yaml'
   crowdsec::local_api::manage { ['machines', 'bouncers']: }
+
+  concat { $profiles_file:
+    owner => $crowdsec::user,
+    group => $crowdsec::group,
+    mode  => '0644',
+  }
 }
