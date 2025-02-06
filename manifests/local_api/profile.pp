@@ -21,7 +21,7 @@ define crowdsec::local_api::profile (
   include crowdsec::local_api
   concat::fragment { "crowdsec_local_api_profile_${name}":
     order   => $order,
-    content => "${config_yaml}---\n",
+    content => $config_yaml,
     target  => $crowdsec::local_api::profiles_file,
   }
 }
