@@ -16,6 +16,6 @@ class crowdsec::local_api {
     owner  => $crowdsec::user,
     group  => $crowdsec::group,
     mode   => '0644',
-    notify => $crowdsec::service_name,
+    notify => Service[$crowdsec::service_name],
   }
 }
