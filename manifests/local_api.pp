@@ -13,8 +13,9 @@ class crowdsec::local_api {
   crowdsec::local_api::manage { ['machines', 'bouncers']: }
 
   concat { $profiles_file:
-    owner => $crowdsec::user,
-    group => $crowdsec::group,
-    mode  => '0644',
+    owner  => $crowdsec::user,
+    group  => $crowdsec::group,
+    mode   => '0644',
+    notify => $crowdsec::service_name,
   }
 }
