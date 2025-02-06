@@ -11,6 +11,10 @@
       "version_requirement": ">= 7.0.0 < 10.0.0"
     },
     {
+      "name": "puppetlabs-concat",
+      "version_requirement": ">= 4.1.0 < 11.0.0"
+    },
+    {
       "name": "puppetlabs/apt",
       "version_requirement": ">= 7.0.0 < 12.0.0"
     },
@@ -22,23 +26,11 @@
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-        "8",
-        "9",
-        "10",
-        "11",
-        "12",
-        "13"
-      ]
+      "operatingsystemrelease": ["8", "9", "10", "11", "12", "13"]
     },
     {
       "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [
-        "20.04",
-        "22.04",
-        "24.04",
-        "24.10"
-      ]
+      "operatingsystemrelease": ["20.04", "22.04", "24.04", "24.10"]
     }
   ],
   "requirements": [

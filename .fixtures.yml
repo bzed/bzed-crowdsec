@@ -2,9 +2,10 @@
 # See https://github.com/puppetlabs/puppetlabs_spec_helper#using-fixtures for details
 ---
 fixtures:
-  repositories:
-    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib"
-    apt: "https://github.com/puppetlabs/puppetlabs-apt"
-    systemd: "https://github.com/voxpupuli/puppet-systemd"
+  forge_modules:
+     stdlib: "puppetlabs/stdlib"
+     concat: "puppetlabs/concat"
+     apt: "puppetlabs/apt"
+     systemd: "puppet/systemd"
   symlinks:
       'crowdsec': "#{source_dir}"
