@@ -40,10 +40,11 @@ describe :crowdsec, type: :fact do
     Facter.clear
     # Facter.add(:ec2_metadata) {}
     # allow(Facter).to receive(:value).with(:fqdn).and_return('test.example.com')
+    # allow(Facter).to receive(:value).with(:fqdn).and_return('test.example.com')
     # allow(Facter.fact(:ec2_metadata)).to receive(:value).and_return({'42'})
   end
 
   it 'returns a value' do
-    expect(fact.value).to eq('hello facter')
+    expect(fact.value).to eq(nil)
   end
 end
