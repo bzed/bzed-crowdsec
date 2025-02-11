@@ -7,8 +7,7 @@
 class crowdsec::sources (
   String $keyring_source = 'puppet:///modules/crowdsec/crowdsec-archive-keyring.gpg',
   Boolean $include_sources = false,
-){
-
+) {
   # deb https://packagecloud.io/crowdsec/crowdsec/ubuntu trusty main
   # deb-src https://packagecloud.io/crowdsec/crowdsec/ubuntu trusty maina
 

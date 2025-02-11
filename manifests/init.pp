@@ -227,7 +227,7 @@ class crowdsec (
     owner   => $user,
     group   => $group,
     mode    => '0640',
-    content => to_yaml($local_config),
+    content => stdlib::to_yaml($local_config),
     require => Package['crowdsec'],
     notify  => Service['crowdsec.service'],
   }
@@ -249,7 +249,7 @@ class crowdsec (
     owner   => $user,
     group   => $group,
     mode    => '0600',
-    content => to_yaml(
+    content => stdlib::to_yaml(
       {
         'url'      => $local_api_url,
         'login'    => $local_api_login,

@@ -3,9 +3,12 @@
 # Whitelists are special parsers that allow you to "discard" events,
 # and can exist as parser or postoverflow whitelist.
 #
-# @param whitelist_name
+# @param module
 # Name of the whitelist. Must be unique, defaults to $name.
 # Must be in the usual foo/bar format.
+#
+# @param module_type
+# parsers or postoverflows. Decides which type of whitelist / when to apply it.
 #
 # @param description
 # Long description of the whitelist content / reason.
@@ -32,16 +35,19 @@
 #
 # @example
 #   crowdsec::whitelist { 'namevar':
-#     reason => "this is an example"
+#     description => 'long description',
+#     reason => "this is an example",
+#     module_type => 'parser',
 #   }
 define crowdsec::whitelist (
   String $description,
   String $reason,
-  Crowdsec::Module_name $whitelist_name = $name,
-  Array[Stdlib::IP::Address::Nosubnet] $ip = [],
-  Array[Stdlib::IP::Address::CIDR] $cidr = [],
-  Array[String] $expression = [],
-  Array[Hash] $data = [],
+  Enum['parsers', 'postoverflows'] $module_type,
+  Crowdsec::Module_name $module = $name,
+  Optional[Array[Stdlib::IP::Address::Nosubnet]] $ip = undef,
+  Optional[Array[Stdlib::IP::Address::CIDR]] $cidr = undef,
+  Optional[Array[String]] $expression = undef,
+  Optional[Array[Hash]] $data = undef,
   Optional[String] $filter = undef,
 ) {
   $_whitelist = {
@@ -49,16 +55,22 @@ define crowdsec::whitelist (
     cidr       => $cidr,
     expression => $expression,
     data       => $data,
-  }.filter |$item| { !($item[1].empty) }
+  }.delete_undef_values
 
   $whitelist = assert_type(Hash[String, Array, 1], $_whitelist) |$expected, $actual| {
     fail('The configured whitelist would be empty, ip/cidr/expression/data are all not set')
   }
 
   $config = {
-    name        => $whitelist_name,
+    name        => $module,
     description => $description,
     filter      => $filter,
     whitelist   => $whitelist,
+  }
+
+  crowdsec::module { $module:
+    module_type    => $module_type,
+    content        => stdlib::to_json($config),
+    module_subtype => 's02-enrich',
   }
 }
