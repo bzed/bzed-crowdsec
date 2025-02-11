@@ -188,7 +188,7 @@ class crowdsec (
       'log_dir' => '/var/log/crowdsec',
     },
     'crowdsec_service' => {
-      'acquisition_dir' => '/etc/crowdsec/acquis.d',
+      'acquisition_dir' => "${config_basedir}/acquis.d",
     },
   }
   $local_api_config = {
