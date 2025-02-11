@@ -47,7 +47,7 @@ class crowdsec::bouncers::firewall (
     'mode'            => $mode,
     'api_url'         => $crowdsec::local_api_url,
     'api_key'         => $api_key.unwrap,
-    'iptables_chains' => ['crowdsec'],
+    'iptables_chains' => ['CROWDSEC'],
   }
   $default_config = parseyaml(
     file('crowdsec/bouncers/crowdsec-firewall-bouncer.yaml')
