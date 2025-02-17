@@ -15,8 +15,7 @@ describe 'crowdsec::local_api::manage' do
   end
   let(:title) { 'machines' }
   let(:params) do
-    {
-    }
+    {}
   end
 
   on_supported_os.each do |os, os_facts|

@@ -35,7 +35,7 @@ describe :crowdsec, type: :fact do
   # Facter::Core::Execution.execute('uname 2>&1')
   # allow(Facter::Core::Execution).to receive(:execute).with('uname 2>&1').and_return('Linux')
 
-  before :each do
+  before do
     # perform any action that should be run before every test
     Facter.clear
     # Facter.add(:ec2_metadata) {}
@@ -45,6 +45,6 @@ describe :crowdsec, type: :fact do
   end
 
   it 'returns a value' do
-    expect(fact.value).to eq(nil)
+    expect(fact.value).to be(nil)
   end
 end

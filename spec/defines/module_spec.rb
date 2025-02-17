@@ -6,7 +6,7 @@ describe 'crowdsec::module' do
   let(:title) { 'crowdsec/mymodule' }
   let(:params) do
     {
-      :module_type => 'collections',
+      module_type: 'collections',
     }
   end
 

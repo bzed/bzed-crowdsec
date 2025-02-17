@@ -11,6 +11,7 @@ describe 'crowdsec::local_api::default_profiles' do
       }
     PUPPET
   end
+
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }

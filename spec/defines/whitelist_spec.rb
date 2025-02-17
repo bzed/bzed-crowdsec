@@ -6,11 +6,11 @@ describe 'crowdsec::whitelist' do
   let(:title) { 'spec/whitelist' }
   let(:params) do
     {
-      :description => 'description',
-      :reason => 'reason',
-      :module_type => 'parsers',
-      :ip => ['1.2.3.4'],
-      :cidr => ['1.2.3.0/24'],
+      description: 'description',
+      reason: 'reason',
+      module_type: 'parsers',
+      ip: ['1.2.3.4'],
+      cidr: ['1.2.3.0/24'],
     }
   end
 

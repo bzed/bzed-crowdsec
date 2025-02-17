@@ -14,7 +14,7 @@ describe 'crowdsec::local_api::profile' do
   let(:title) { 'namevar' }
   let(:params) do
     {
-      :config => { }
+      config: {}
     }
   end
 

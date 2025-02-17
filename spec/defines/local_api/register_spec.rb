@@ -6,7 +6,7 @@ describe 'crowdsec::local_api::register' do
   let(:title) { 'namevar' }
   let(:params) do
     {
-      :password => 'password'
+      password: 'password'
     }
   end
 
