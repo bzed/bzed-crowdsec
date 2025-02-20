@@ -70,7 +70,7 @@ define crowdsec::whitelist (
 
   crowdsec::module { $module:
     module_type    => $module_type,
-    content        => stdlib::to_json($config),
+    content        => stdlib::to_yaml($config),
     module_subtype => 's02-enrich',
   }
 }
