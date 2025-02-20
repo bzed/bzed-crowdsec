@@ -38,6 +38,9 @@
 # @param module_subtype
 # "module_subtype" of the module, for example s01-parse to install in crowdsec/parsers/s01-parse
 #
+# @param allow_tainted
+# allow the module to be tainted
+#
 # @example
 #   crowdsec::module { 'crowdsecurity/ssh-bf':
 #     type => 'collections',
@@ -51,6 +54,7 @@ define crowdsec::module (
   Optional[String] $source = undef,
   Optional[String] $content = undef,
   Optional[String] $module_subtype = undef,
+  Boolean $allow_tainted = false,
 ) {
   include crowdsec
 
@@ -112,7 +116,7 @@ define crowdsec::module (
       $install = false
     } else {
       $uninstall = false
-      if 'tainted' in $current_state or !('enabled' in $current_state) {
+      if ('tainted' in $current_state and !$allow_tainted) or !('enabled' in $current_state) {
         exec { $install_cmd:
           path    => $facts['path'],
           user    => $crowdsec::user,
