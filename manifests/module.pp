@@ -107,7 +107,7 @@ define crowdsec::module (
       notify  => Service[$crowdsec::service_name],
     }
   } else {
-    $uninstall_cmd = "cscli ${module_type} remove ${module}"
+    $uninstall_cmd = "cscli ${module_type} remove --force ${module}"
     $install_flags = shellquote(Array($install_options))
     $install_cmd = "cscli ${module_type} install ${module} --force ${install_flags}".strip()
 
